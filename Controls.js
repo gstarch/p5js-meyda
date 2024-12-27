@@ -64,7 +64,7 @@ class Controls {
     this.sound.jump(newPosition);
     console.log('Jumped to', newPosition);
     console.log('isPlaying:', this.sound.isPlaying());
-    setTimeout(() => this.updatePlayButton(), 100); // avoids play state mismatch on jump
+    //setTimeout(() => this.updatePlayButton(), 100); // avoids play state mismatch on jump
   }
 
   update() {
