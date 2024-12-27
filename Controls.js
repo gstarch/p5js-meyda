@@ -1,6 +1,7 @@
 class Controls {
-  constructor(sound) {
+  constructor(sound, analyzer) {
     this.sound = sound;
+    this.analyzer = analyzer;
     this.playButton = createButton('Play');
     this.jumpButton = createButton('Jump');
     this.volumeSlider = createSlider(0, 1, 0.5, 0.01);
@@ -31,9 +32,11 @@ class Controls {
     if (this.sound.isPlaying()) {
       console.log('Pausing');
       this.sound.pause();
+      this.analyzer.stop();
     } else {
       console.log('Playing');
       this.sound.play();
+      this.analyzer.start();
     }
     this.updatePlayButton();
   }
@@ -64,7 +67,6 @@ class Controls {
     this.sound.jump(newPosition);
     console.log('Jumped to', newPosition);
     console.log('isPlaying:', this.sound.isPlaying());
-    //setTimeout(() => this.updatePlayButton(), 100); // avoids play state mismatch on jump
   }
 
   update() {
