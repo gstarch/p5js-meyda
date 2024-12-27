@@ -4,21 +4,28 @@ let fileInput;
 
 let analyzer;
 let circleRadius;
-
-
-let windowWidth = 800;
-let windowHeight = 600;
+let backgroundColor;
+let waveform = [];
+let waveformVisual;
 
 function setup() {
+  backgroundColor = color(Constants.backgroundColor[0], Constants.backgroundColor[1], Constants.backgroundColor[2]);
+
   soundFormats('wav', 'mp3');
-  mySound = loadSound('../sounds/Kalte Ohren (Remix).mp3');
+  mySound = loadSound('../sounds/Kalte Ohren (Remix).mp3', () => {
+    waveform = mySound.getPeaks();
+    waveformVisual = new WaveformVisual(waveform, mySound);
+  });
 
   mySound.onended(() => {
     controls.playButton.html('Play');
   });
   
-  createCanvas(windowWidth, windowHeight);
-  background(0);
+  createCanvas(Constants.windowWidth, Constants.windowHeight);
+  background(Constants.backgroundColor);
+
+  // Initialize Visuals
+  waveformVisual = new WaveformVisual(waveform, mySound);
 
   // Initialize Analyzer
   circleRadius = 0;
@@ -30,6 +37,7 @@ function setup() {
       "featureExtractors": ["rms", "zcr"],
       "callback": (features) => {
         console.log(features);
+        circleRadius = map(features.rms, 0, 0.1, 0, 200);
       } 
     });
     analyzer.start();
@@ -51,6 +59,8 @@ function setup() {
         if (analyzer) {
           analyzer.setSource(mySound);
         }
+
+        waveform = mySound.getPeaks();
       }, () => {
         console.error('Failed to load the audio file.');
       });
@@ -69,7 +79,15 @@ function setup() {
 }
 
 function draw() {
+  background(backgroundColor);
   // put drawing code here
   controls.update();
+  waveformVisual.draw();
+
+
+  // Draw circle
+  fill(255);
+  ellipse(width / 2, height / 2, circleRadius, circleRadius);
+
 }
 
