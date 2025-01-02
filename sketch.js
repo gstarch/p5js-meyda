@@ -14,7 +14,8 @@ function setup() {
   soundFormats('wav', 'mp3');
   mySound = loadSound('../sounds/Kalte Ohren (Remix).mp3', () => {
     waveform = mySound.getPeaks();
-    waveformVisual = new WaveformVisual(waveform, 50, 450, 700, 100);  
+    // initialize Visuals after sound is loaded
+    waveformVisual = new WaveformVisual(waveform, 20, 300, 910, 255);  
     waveformVisual.setSource(mySound);
   });
 
@@ -25,7 +26,7 @@ function setup() {
   createCanvas(Constants.windowWidth, Constants.windowHeight);
   background(Constants.backgroundColor);
 
-  // re-initialize Visuals after canvas setup
+  // initialize Visuals after canvas setup
   waveformVisual = new WaveformVisual();
   waveformVisual.setSource(mySound);
 

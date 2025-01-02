@@ -17,8 +17,8 @@ class WaveformVisual {
         stroke(255);
         noFill();
         
-        // draw the rectangle around the waveform
-        rect(this.x, this.y, this.width, this.height);
+        // draw a rectangle around the waveform
+        //rect(this.x, this.y, this.width, this.height);
 
         // draw the skyline waveform
         translate(this.x, this.y + this.height / 2);
