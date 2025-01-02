@@ -81,7 +81,7 @@ function setup() {
   fileInput.style('font-family', 'monospace');
   fileInput.style('border', '1px solid white');
   fileInput.style('border-radius', '5px');
-  fileInput.style('width', '600px');
+  fileInput.style('width', '750px');
 }
 
 function draw() {

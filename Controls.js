@@ -21,11 +21,6 @@ class Controls {
     this.volumeSlider.position(10, 40);
     this.speedSlider.position(10, 80);
     this.panSlider.position(10, 120);
-
-    fill(255);
-    text('Volume', 53, 75);
-    text('Speed', 53, 115);
-    text('Pan', 53, 155);
   }
 
   playStopSound() {
@@ -73,5 +68,9 @@ class Controls {
     this.setVolume();
     this.setSpeed();
     this.setPan();
+    fill(255);
+    text('Volume', 53, 75);
+    text('Speed', 53, 115);
+    text('Pan', 53, 155);
   }
 } 
