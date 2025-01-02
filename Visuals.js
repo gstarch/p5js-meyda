@@ -52,3 +52,18 @@ class WaveformVisual {
         }
     }
 }
+
+class CircleVisual {
+    constructor(x = 0, y = 0, radius = 0) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+    }
+
+    draw(radius) {
+        push();
+        fill(255);
+        ellipse(this.x, this.y, radius, radius);
+        pop();
+    }
+}

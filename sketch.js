@@ -7,7 +7,7 @@ let circleRadius;
 let backgroundColor;
 let waveform = [];
 let waveformVisual;
-
+let circleVisual;
 function setup() {
   backgroundColor = color(Constants.backgroundColor[0], Constants.backgroundColor[1], Constants.backgroundColor[2]);
 
@@ -29,6 +29,7 @@ function setup() {
   // initialize Visuals after canvas setup
   waveformVisual = new WaveformVisual();
   waveformVisual.setSource(mySound);
+  circleVisual = new CircleVisual(width / 2, height / 2, 20);
 
   // initialize Analyzer
   circleRadius = 0;
@@ -89,9 +90,7 @@ function draw() {
   // put drawing code here
   controls.update();
   waveformVisual.draw();
+  circleVisual.draw(circleRadius);
 
-  // Draw circle
-  fill(255);
-  ellipse(width / 2, height / 2, circleRadius, circleRadius);
 }
 
