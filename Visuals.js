@@ -1,3 +1,5 @@
+
+
 class WaveformVisual {
     constructor(waveform = [], x = 0, y = 0, width = 0, height = 0) {
         this.waveform = waveform;
@@ -6,6 +8,7 @@ class WaveformVisual {
         this.width = width;
         this.height = height;
         this.source = null;
+        this.scrubber = new Scrubber(this.x, this.y + 2, 2, this.height - 4);
     }
 
     setSource(source) {
@@ -39,17 +42,34 @@ class WaveformVisual {
 
         //draw scrubber to show current position
         if (this.source && this.source.isPlaying()) {
-            push();
             let currentTime = this.source.currentTime();
             let duration = this.source.duration();
             let currentSample = floor(map(currentTime, 0, duration, 0, this.waveform.length));
-            let x = map(currentSample, 0, this.waveform.length, 0, this.width);
-            let y = map(this.waveform[currentSample], -1, 1, this.height / 2, -this.height / 2);
-            stroke(255, 0, 0);
-            noFill();
-            rect(this.x + x, this.y+2, 2, this.height-4);
-            pop();
+            this.scrubber.updatePosition(currentSample, this.waveform.length, this.x, this.width);
+            this.scrubber.draw();
         }
+    }
+}
+
+class Scrubber {
+    constructor(x = 0, y = 0, width = 2, height = 0, color = [255, 0, 0]) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.color = color;
+    }
+
+    draw() {
+        push();
+        stroke(...this.color);
+        noFill();
+        rect(this.x, this.y, this.width, this.height);
+        pop();
+    }
+
+    updatePosition(currentSample, waveformLength, visualX, visualWidth) {
+        this.x = map(currentSample, 0, waveformLength, visualX, visualWidth);
     }
 }
 
