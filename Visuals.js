@@ -31,11 +31,18 @@ class WaveformVisual {
             let x = map(i, 0, this.waveform.length, 0, this.width);
             let y = map(this.waveform[i], -1, 1, this.height / 2, -this.height / 2);
             strokeWeight(1);
-            let brt = map(this.waveform[i], 1, -1, 80, 255);
-            let alpha = map(abs(this.waveform[i]), 0, 1, 0, 205);
-            stroke(brt, 80, 100, alpha);
+
+            //skyline
+            let hue = map(this.waveform[i], 1, -1, 250, 380);
+            hue = hue % 360;
+            let sat = 100;
+            let brt = 100;
+            let alpha = map(abs(this.waveform[i]), 0, 1, 0, 100);
+            stroke(hue, sat, brt, alpha);
             rect(x, (this.height / 4)-2, 5, -abs(y));
-            stroke(brt, 100, 100, 20);
+            
+            //reflection
+            stroke(hue, 50, 50, 30);
             strokeWeight(4);
             rect(x, (this.height / 4)-2, 2, abs(y/2));
 
@@ -54,7 +61,7 @@ class WaveformVisual {
 }
 
 class Scrubber {
-    constructor(x = 0, y = 0, width = 2, height = 0, color = [255, 0, 0]) {
+    constructor(x = 0, y = 0, width = 2, height = 0, color = [0, 100, 100]) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -106,3 +113,62 @@ class CircleVisual {
         pop();
     }
 }
+
+
+// class Cube {
+//     constructor(x, y, size, color) {
+//         this.x = x;
+//         this.y = y;
+//         this.size = size;
+//         this.color = color;
+//         this.speedX = random(-2, 2);
+//         this.speedY = random(-2, 2);
+//     }
+
+//     update() {
+//         this.x += this.speedX;
+//         this.y += this.speedY;
+
+//         // Bounce off the edges
+//         if (this.x < 0 || this.x > width - this.size) {
+//             this.speedX *= -1;
+//         }
+//         if (this.y < 0 || this.y > height - this.size) {
+//             this.speedY *= -1;
+//         }
+
+//         this.draw();
+//     }
+
+//     draw() {
+//         push();
+//         fill(this.color);
+//         rect(this.x, this.y, this.size, this.size);
+//         pop();
+//     }
+// }
+
+// class CubeManager {
+//     constructor() {
+//         this.cubes = [];
+//     }
+
+//     addCube(x, y, size, color) {
+//         this.cubes.push(new Cube(x, y, size, color));
+//     }
+
+//     removeCube(index) {
+//         if (index >= 0 && index < this.cubes.length) {
+//             this.cubes.splice(index, 1);
+//         }
+//     }
+
+//     updateCubes(features) {
+//         for (let cube of this.cubes) {
+//             // Update cube properties based on Meyda analyzer features
+//             cube.size = map(features.rms, 0, 0.1, 10, 100);
+//             cube.color = color(map(features.zcr, 0, 1, 0, 360), 100, 100);
+//             cube.update();
+//         }
+//     }
+// }

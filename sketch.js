@@ -8,7 +8,11 @@ let backgroundColor;
 let waveform = [];
 let waveformVisual;
 let circleVisual;
+
+
 function setup() {
+  
+  colorMode(HSB, 360, 100, 100, 255);
   backgroundColor = color(Constants.backgroundColor[0], Constants.backgroundColor[1], Constants.backgroundColor[2]);
 
   soundFormats('wav', 'mp3');
