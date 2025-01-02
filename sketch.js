@@ -60,6 +60,8 @@ function setup() {
           analyzer.setSource(mySound);
         }
 
+        waveformVisual.updateSource(mySound);
+
         waveform = mySound.getPeaks();
       }, () => {
         console.error('Failed to load the audio file.');
