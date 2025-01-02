@@ -115,60 +115,60 @@ class CircleVisual {
 }
 
 
-// class Cube {
-//     constructor(x, y, size, color) {
-//         this.x = x;
-//         this.y = y;
-//         this.size = size;
-//         this.color = color;
-//         this.speedX = random(-2, 2);
-//         this.speedY = random(-2, 2);
-//     }
+class Cube {
+    constructor(x, y, size, color) {
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.color = color;
+        this.speedX = random(-2, 2);
+        this.speedY = random(-2, 2);
+    }
 
-//     update() {
-//         this.x += this.speedX;
-//         this.y += this.speedY;
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
 
-//         // Bounce off the edges
-//         if (this.x < 0 || this.x > width - this.size) {
-//             this.speedX *= -1;
-//         }
-//         if (this.y < 0 || this.y > height - this.size) {
-//             this.speedY *= -1;
-//         }
+        // Bounce off the edges
+        if (this.x < 0 || this.x > width - this.size) {
+            this.speedX *= -1;
+        }
+        if (this.y < 0 || this.y > height - this.size) {
+            this.speedY *= -1;
+        }
 
-//         this.draw();
-//     }
+        this.draw();
+    }
 
-//     draw() {
-//         push();
-//         fill(this.color);
-//         rect(this.x, this.y, this.size, this.size);
-//         pop();
-//     }
-// }
+    draw() {
+        push();
+        fill(this.color);
+        rect(this.x, this.y, this.size, this.size);
+        pop();
+    }
+}
 
-// class CubeManager {
-//     constructor() {
-//         this.cubes = [];
-//     }
+class CubeManager {
+    constructor() {
+        this.cubes = [];
+    }
 
-//     addCube(x, y, size, color) {
-//         this.cubes.push(new Cube(x, y, size, color));
-//     }
+    addCube(x, y, size, color) {
+        this.cubes.push(new Cube(x, y, size, color));
+    }
 
-//     removeCube(index) {
-//         if (index >= 0 && index < this.cubes.length) {
-//             this.cubes.splice(index, 1);
-//         }
-//     }
+    removeCube(index) {
+        if (index >= 0 && index < this.cubes.length) {
+            this.cubes.splice(index, 1);
+        }
+    }
 
-//     updateCubes(features) {
-//         for (let cube of this.cubes) {
-//             // Update cube properties based on Meyda analyzer features
-//             cube.size = map(features.rms, 0, 0.1, 10, 100);
-//             cube.color = color(map(features.zcr, 0, 1, 0, 360), 100, 100);
-//             cube.update();
-//         }
-//     }
-// }
+    update(features) {
+        for (let cube of this.cubes) {
+            // Update cube properties based on Meyda analyzer features
+            cube.size = map(features.rms, 0, 0.1, 10, 100);
+            cube.color = color(map(features.zcr, 0, 1, 0, 360), 100, 100);
+            cube.update();
+        }
+    }
+}

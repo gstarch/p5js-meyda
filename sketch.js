@@ -9,10 +9,11 @@ let waveform = [];
 let waveformVisual;
 let circleVisual;
 
+let cubeManager;
 
 function setup() {
-  
   colorMode(HSB, 360, 100, 100, 255);
+  
   backgroundColor = color(Constants.backgroundColor[0], Constants.backgroundColor[1], Constants.backgroundColor[2]);
 
   soundFormats('wav', 'mp3');
@@ -46,6 +47,7 @@ function setup() {
       "callback": (features) => {
         console.log(features);
         circleRadius = map(features.rms, 0, 0.1, 0, 200);
+        cubeManager.update(features);
       } 
     });
     analyzer.start();
@@ -56,6 +58,9 @@ function setup() {
 
   // initialize Controls
   controls = new Controls(mySound, analyzer);
+
+  // initialize CubeManager
+  cubeManager = new CubeManager();
 
   // ioad file
   fileInput = createFileInput(file => {
@@ -96,6 +101,8 @@ function draw() {
   controls.update();
   circleVisual.update(circleRadius);
   waveformVisual.update();
-
 }
 
+function mousePressed() {
+  cubeManager.addCube(mouseX, mouseY, 10, color(random(360), 100, 100));
+}
