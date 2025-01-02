@@ -29,7 +29,7 @@ function setup() {
   // initialize Visuals after canvas setup
   waveformVisual = new WaveformVisual();
   waveformVisual.setSource(mySound);
-  circleVisual = new CircleVisual(width / 2, height / 2, 20);
+  circleVisual = new CircleVisual(width / 2, height / 2, 10, 0.96);
 
   // initialize Analyzer
   circleRadius = 0;
@@ -87,10 +87,11 @@ function setup() {
 
 function draw() {
   background(backgroundColor);
+
   // put drawing code here
   controls.update();
-  waveformVisual.draw();
-  circleVisual.draw(circleRadius);
+  circleVisual.update(circleRadius);
+  waveformVisual.update();
 
 }
 

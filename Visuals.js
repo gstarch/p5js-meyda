@@ -1,5 +1,3 @@
-
-
 class WaveformVisual {
     constructor(waveform = [], x = 0, y = 0, width = 0, height = 0) {
         this.waveform = waveform;
@@ -13,6 +11,10 @@ class WaveformVisual {
 
     setSource(source) {
         this.source = source;
+    }
+
+    update(){
+        this.draw();
     }
 
     draw() {
@@ -74,16 +76,33 @@ class Scrubber {
 }
 
 class CircleVisual {
-    constructor(x = 0, y = 0, radius = 0) {
+    constructor(x = 0, y = 0, minRadius = 10, decayRate = 0.95) {
         this.x = x;
         this.y = y;
-        this.radius = radius;
+        this.radius = 0;
+        this.minRadius = minRadius; 
+        this.decayRate = decayRate; 
     }
 
-    draw(radius) {
+    update(radius) {
+        //when a beat is detected, update the radius
+        if (radius > this.radius) {
+            this.radius = radius;
+        } else {
+            // otherwise decay
+            this.radius *= this.decayRate;
+            // ensure the radius doesn't go below the minimum radius
+            if (this.radius < this.minRadius) {
+                this.radius = this.minRadius;
+            }
+        }
+        this.draw();
+    }
+
+    draw() {
         push();
         fill(255);
-        ellipse(this.x, this.y, radius, radius);
+        ellipse(this.x, this.y, this.radius, this.radius);
         pop();
     }
 }
