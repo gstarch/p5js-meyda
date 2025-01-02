@@ -25,11 +25,11 @@ function setup() {
   createCanvas(Constants.windowWidth, Constants.windowHeight);
   background(Constants.backgroundColor);
 
-  // Re-initialize Visuals after canvas setup
+  // re-initialize Visuals after canvas setup
   waveformVisual = new WaveformVisual();
   waveformVisual.setSource(mySound);
 
-  // Initialize Analyzer
+  // initialize Analyzer
   circleRadius = 0;
   if (typeof Meyda !== "undefined") {
     analyzer = Meyda.createMeydaAnalyzer({
@@ -48,10 +48,10 @@ function setup() {
     console.error('Meyda was not found');
   }
 
-  // Initialize Controls
+  // initialize Controls
   controls = new Controls(mySound, analyzer);
 
-  // Load file
+  // ioad file
   fileInput = createFileInput(file => {
     if (file.type === 'audio') {
       mySound = loadSound(file, () => {
