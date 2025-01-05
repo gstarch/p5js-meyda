@@ -172,3 +172,53 @@ class CubeManager {
         }
     }
 }
+
+
+class PolarSpectrum {
+    constructor(x, y, radius) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.fft = new p5.FFT(); // Initialize FFT
+    }
+
+    update() {
+        let spectrum = this.fft.analyze(); // Get FFT data
+        this.draw(spectrum);
+    }
+
+    draw(spectrum) {
+        push();
+        translate(this.x, this.y);
+        noFill();
+        strokeWeight(2);
+        
+        // Use only a portion of the spectrum (highest frequencies don't occur that often)
+        let usableSpectrumLength = floor(spectrum.length * 0.7);
+        let angleStep = TWO_PI / usableSpectrumLength; // Adjust angle step
+
+        for (let i = 0; i < usableSpectrumLength; i++) {
+            let amplitude = spectrum[i];
+
+            let angle = i * angleStep;
+            // map amplitude to a color
+            let c = map(amplitude, 0, 255, 0, 400);
+            c = c % 360; // wrap around 360 for HSB mode
+            let sat = 100;
+            let brt = 100;
+
+            stroke(c, sat, brt);
+            
+            let r = map(amplitude, 0, 255, 0, this.radius);
+
+            // Convert polar to cartesian coordinates
+            let x = r * cos(angle);
+            let y = r * sin(angle);
+
+            // Draw a line from the center to the edge
+            line(0, 0, x, y);
+        }
+
+        pop();
+    }
+}

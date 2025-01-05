@@ -8,6 +8,7 @@ let backgroundColor;
 let waveform = [];
 let waveformVisual;
 let circleVisual;
+let polarSpectrum;
 
 let cubeManager;
 
@@ -35,6 +36,9 @@ function setup() {
   waveformVisual = new WaveformVisual();
   waveformVisual.setSource(mySound);
   circleVisual = new CircleVisual(width / 2, height / 2, 10, 0.96);
+
+  // Initialize PolarSpectrum
+  polarSpectrum = new PolarSpectrum(width / 2, height / 2, 150);
 
   // initialize Analyzer
   circleRadius = 0;
@@ -99,10 +103,19 @@ function draw() {
 
   // put drawing code here
   controls.update();
-  circleVisual.update(circleRadius);
+  circleVisual.update(circleRadius); //TODO: move to Meyda callback
   waveformVisual.update();
+  polarSpectrum.update();
+  drawFileName();
 }
 
 function mousePressed() {
   cubeManager.addCube(mouseX, mouseY, 10, color(random(360), 100, 100));
+}
+
+function drawFileName() {
+  fill(255);
+  textAlign(CENTER, BOTTOM);
+  textSize(16);
+  text(fileInput.elt.files[0] ? fileInput.elt.files[0].name : 'No file selected', width / 2, height - 50);
 }
