@@ -175,42 +175,46 @@ class CubeManager {
 
 
 class PolarSpectrum {
-    constructor(x, y, radius) {
+    constructor(x, y, radius, fftSize = 128) {
         this.x = x;
         this.y = y;
         this.radius = radius;
-        this.fft = new p5.FFT(); // Initialize FFT
-        this.rotationAngle = 0; // Initialize rotation angle
+        this.fft = new p5.FFT(0.8, fftSize);
+        this.rotationAngle = 0;
+        this.skipFirstLastBins = 20; //number of bins to skip at the beginning and end of spectrum
     }
 
     update() {
-        let spectrum = this.fft.analyze(); // Get FFT data
-        this.rotationAngle += 0.01; // Increment rotation angle for constant rotation
+        let spectrum = this.fft.analyze();
+        this.rotationAngle += 0.01;
         this.draw(spectrum);
     }
 
     draw(spectrum) {
         push();
         translate(this.x, this.y);
-        rotate(this.rotationAngle); // Apply rotation
+        rotate(this.rotationAngle);
         noFill();
-        strokeWeight(2);
+        strokeWeight(4);
         
         // Use only a portion of the spectrum (highest frequencies don't occur that often)
-        let usableSpectrumLength = floor(spectrum.length * 0.7);
-        let angleStep = TWO_PI / usableSpectrumLength; // Adjust angle step
+        let usableSpectrumLength = floor(spectrum.length * 0.8);
+        let angleStep = TWO_PI / (usableSpectrumLength - this.skipFirstLastBins * 2);
 
-        for (let i = 0; i < usableSpectrumLength; i++) {
+        let step = 1;
+
+        for (let i = this.skipFirstLastBins; i < usableSpectrumLength - this.skipFirstLastBins; i += step) {
             let amplitude = spectrum[i];
 
             let angle = i * angleStep;
             // map amplitude to a color
             let c = map(amplitude, 0, 255, 0, 400);
-            c = c % 360; // wrap around 360 for HSB mode
+            c = c % 360;
             let sat = 100;
             let brt = 100;
+            let alpha = map(amplitude, 0, 255, 100, 255);
 
-            stroke(c, sat, brt);
+            stroke(c, sat, brt, alpha);
             
             let r = map(amplitude, 0, 255, 0, this.radius);
 

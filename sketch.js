@@ -104,8 +104,8 @@ function draw() {
   // put drawing code here
   controls.update();
   circleVisual.update(circleRadius); //TODO: move to Meyda callback
-  polarSpectrum.update();
   waveformVisual.update();
+  polarSpectrum.update();
   drawFileName();
 }
 
