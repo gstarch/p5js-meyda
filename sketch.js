@@ -11,6 +11,7 @@ let circleVisual;
 let polarSpectrum;
 let scrubber;
 let cubeManager;
+let chromaCircles;
 
 function setup() {
   colorMode(HSB, 360, 100, 100, 255);
@@ -67,7 +68,7 @@ function setup() {
   // initialize Controls
   controls = new Controls(mySound, analyzer);
 
-  // initialize CubeManager with the scrubber
+  // initialize CubeManager
   cubeManager = new CubeManager(scrubber);
 
   // ioad file
@@ -100,16 +101,19 @@ function setup() {
   fileInput.style('border', '1px solid white');
   fileInput.style('border-radius', '5px');
   fileInput.style('width', '750px');
+
+  // initialize ChromaCircles
+  chromaCircles = new ChromaCircles(height - 50);
 }
 
 function draw() {
   background(backgroundColor);
-
-  // put drawing code here
   controls.update();
   circleVisual.update(circleRadius); //TODO: move to Meyda callback
   waveformVisual.update(scrubber);
   polarSpectrum.update();
+  chromaCircles.update(analyzer.get('chroma'));
+  chromaCircles.draw();
   drawFileName();
 }
 

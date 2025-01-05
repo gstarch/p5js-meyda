@@ -229,7 +229,7 @@ class PolarSpectrum {
         noFill();
         strokeWeight(4);
         
-        // Use only a portion of the spectrum (highest frequencies don't occur that often)
+        // use only a portion of the spectrum (highest frequencies don't occur that often)
         let usableSpectrumLength = floor(spectrum.length * 0.8);
         let angleStep = TWO_PI / (usableSpectrumLength - this.skipFirstLastBins * 2);
 
@@ -260,14 +260,47 @@ class PolarSpectrum {
             
             let r = map(amplitude, 0, 255, 0, this.radius);
 
-            // Convert polar to cartesian coordinates
+            // polar to cartesian 
             let x = r * cos(angle);
             let y = r * sin(angle);
 
-            // Draw a line from the center to the edge
+            // line from the center to the edge
             line(0, 0, x, y);
         }
 
+        pop();
+    }
+}
+
+class ChromaCircles {
+    constructor(yPosition, circleRadius = 20) {
+        this.yPosition = yPosition;
+        this.circleRadius = circleRadius;
+        this.circles = Array(12).fill().map((_, i) => ({
+            x: map(i, 0, 11, 50, width - 50), // spread circles evenly
+            size: circleRadius,
+            brightness: 100
+        }));
+    }
+
+    update(chroma) {
+        if (chroma) {
+            for (let i = 0; i < this.circles.length; i++) {
+                let chromaValue = chroma[i];
+                this.circles[i].size = map(chromaValue, 0, 1, 8, 100);
+                this.circles[i].brightness = map(chromaValue, 0, 1, 0, 100);
+                this.circles[i].yPosition = map(chromaValue, 0, 1, 520, 630);
+            }
+        }
+    }
+
+    draw() {
+        push();
+        noStroke();
+        for (let circle of this.circles) {
+            fill(220, circle.brightness, circle.brightness, 80);
+            ellipse(circle.x, circle.yPosition, circle.size, circle.size);
+        }
         pop();
     }
 }
