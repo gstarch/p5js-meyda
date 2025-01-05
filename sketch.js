@@ -38,7 +38,7 @@ function setup() {
   circleVisual = new CircleVisual(width / 2, height / 2, 10, 0.96);
 
   // Initialize PolarSpectrum
-  polarSpectrum = new PolarSpectrum(width / 2, height / 2, 150);
+  polarSpectrum = new PolarSpectrum(width / 2, height / 2, 300);
 
   // initialize Analyzer
   circleRadius = 0;
@@ -104,8 +104,8 @@ function draw() {
   // put drawing code here
   controls.update();
   circleVisual.update(circleRadius); //TODO: move to Meyda callback
-  waveformVisual.update();
   polarSpectrum.update();
+  waveformVisual.update();
   drawFileName();
 }
 

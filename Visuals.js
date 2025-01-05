@@ -180,16 +180,19 @@ class PolarSpectrum {
         this.y = y;
         this.radius = radius;
         this.fft = new p5.FFT(); // Initialize FFT
+        this.rotationAngle = 0; // Initialize rotation angle
     }
 
     update() {
         let spectrum = this.fft.analyze(); // Get FFT data
+        this.rotationAngle += 0.01; // Increment rotation angle for constant rotation
         this.draw(spectrum);
     }
 
     draw(spectrum) {
         push();
         translate(this.x, this.y);
+        rotate(this.rotationAngle); // Apply rotation
         noFill();
         strokeWeight(2);
         
