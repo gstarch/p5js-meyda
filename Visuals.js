@@ -6,7 +6,7 @@ class WaveformVisual {
         this.width = width;
         this.height = height;
         this.source = null;
-        this.scrubber = new Scrubber(this.x, this.y + 2, 2, this.height - 4);
+        this.scrubber = new Scrubber(this.x, this.y + this.height*0.7, 2, 30);
     }
 
     setSource(source) {
@@ -45,12 +45,12 @@ class WaveformVisual {
             stroke(hue, 50, 50, 30);
             strokeWeight(4);
             rect(x, (this.height / 4)-2, 2, abs(y/2));
-
+        
         }
         pop();
 
         //draw scrubber to show current position
-        if (this.source && this.source.isPlaying()) {
+        if (this.source) {
             let currentTime = this.source.currentTime();
             let duration = this.source.duration();
             let currentSample = floor(map(currentTime, 0, duration, 0, this.waveform.length));
