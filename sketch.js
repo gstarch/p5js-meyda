@@ -9,7 +9,7 @@ let waveform = [];
 let waveformVisual;
 let circleVisual;
 let polarSpectrum;
-
+let scrubber;
 let cubeManager;
 
 function setup() {
@@ -40,6 +40,9 @@ function setup() {
   // Initialize PolarSpectrum
   polarSpectrum = new PolarSpectrum(width / 2, height / 2, 300);
 
+  // Initialize scrubber
+  scrubber = new Scrubber(20, 300 + 255 * 0.7, 2, 30);
+
   // initialize Analyzer
   circleRadius = 0;
   if (typeof Meyda !== "undefined") {
@@ -63,8 +66,8 @@ function setup() {
   // initialize Controls
   controls = new Controls(mySound, analyzer);
 
-  // initialize CubeManager
-  cubeManager = new CubeManager();
+  // initialize CubeManager with the scrubber
+  cubeManager = new CubeManager(scrubber);
 
   // ioad file
   fileInput = createFileInput(file => {
@@ -104,7 +107,7 @@ function draw() {
   // put drawing code here
   controls.update();
   circleVisual.update(circleRadius); //TODO: move to Meyda callback
-  waveformVisual.update();
+  waveformVisual.update(scrubber);
   polarSpectrum.update();
   drawFileName();
 }

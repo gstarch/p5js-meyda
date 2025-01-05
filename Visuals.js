@@ -6,18 +6,17 @@ class WaveformVisual {
         this.width = width;
         this.height = height;
         this.source = null;
-        this.scrubber = new Scrubber(this.x, this.y + this.height*0.7, 2, 30);
     }
 
     setSource(source) {
         this.source = source;
     }
 
-    update(){
-        this.draw();
+    update(scrubber){
+        this.draw(scrubber);
     }
 
-    draw() {
+    draw(scrubber) {
         push();
         stroke(255);
         noFill();
@@ -50,12 +49,12 @@ class WaveformVisual {
         pop();
 
         //draw scrubber to show current position
-        if (this.source) {
+        if (this.source && scrubber) {
             let currentTime = this.source.currentTime();
             let duration = this.source.duration();
             let currentSample = floor(map(currentTime, 0, duration, 0, this.waveform.length));
-            this.scrubber.updatePosition(currentSample, this.waveform.length, this.x, this.width);
-            this.scrubber.draw();
+            scrubber.updatePosition(currentSample, this.waveform.length, this.x, this.width);
+            scrubber.draw();
         }
     }
 }
