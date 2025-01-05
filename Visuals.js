@@ -20,9 +20,6 @@ class WaveformVisual {
         push();
         stroke(255);
         noFill();
-        
-        // draw a rectangle around the waveform
-        //rect(this.x, this.y, this.width, this.height);
 
         // draw the skyline waveform
         translate(this.x, this.y + this.height / 2);
@@ -115,13 +112,14 @@ class CircleVisual {
 
 
 class Cube {
-    constructor(x, y, size, color) {
+    constructor(x, y, size, color, scrubber) {
         this.x = x;
         this.y = y;
         this.size = size;
         this.color = color;
         this.speedX = random(-2, 2);
         this.speedY = random(-2, 2);
+        this.scrubber = scrubber;
     }
 
     update() {
@@ -129,10 +127,10 @@ class Cube {
         this.y += this.speedY;
 
         // Bounce off the edges
-        if (this.x < 0 || this.x > width - this.size) {
+        if (this.x < this.size / 2 || this.x > width - this.size / 2) {
             this.speedX *= -1;
         }
-        if (this.y < 0 || this.y > height - this.size) {
+        if (this.y < this.size / 2 || this.y > height - this.size / 2) {
             this.speedY *= -1;
         }
 
@@ -141,19 +139,27 @@ class Cube {
 
     draw() {
         push();
+        rectMode(CENTER);
         fill(this.color);
         rect(this.x, this.y, this.size, this.size);
+
+        // Draw lines to the scrubber
+        stroke(255);
+        line(this.x, this.y, this.scrubber.x, this.scrubber.y);
+        line(this.x, this.y, this.scrubber.x + this.scrubber.width, this.scrubber.y);
+        
         pop();
     }
 }
 
 class CubeManager {
-    constructor() {
+    constructor(scrubber) {
         this.cubes = [];
+        this.scrubber = scrubber;
     }
 
     addCube(x, y, size, color) {
-        this.cubes.push(new Cube(x, y, size, color));
+        this.cubes.push(new Cube(x, y, size, color, this.scrubber));
     }
 
     removeCube(index) {
@@ -207,7 +213,7 @@ class PolarSpectrum {
 
             let angle = i * angleStep;
             // map amplitude to a color
-            let c = map(amplitude, 0, 255, 0, 400);
+            let c = map(amplitude, 0, 255, 250, 550);
             c = c % 360;
             let sat = 100;
             let brt = 100;
