@@ -114,6 +114,7 @@ function draw() {
 
 function mousePressed() {
   cubeManager.addCube(mouseX, mouseY, 10, color(random(360), 100, 100));
+  polarSpectrum.cycleColorStyle();
 }
 
 function drawFileName() {

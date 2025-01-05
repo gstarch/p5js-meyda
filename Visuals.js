@@ -120,11 +120,15 @@ class Cube {
         this.speedX = random(-2, 2);
         this.speedY = random(-2, 2);
         this.scrubber = scrubber;
+        this.lifespan = 6000;
     }
 
     update() {
         this.x += this.speedX;
         this.y += this.speedY;
+        if (this.lifespan > 0) {
+                this.lifespan--;
+        }
 
         // Bounce off the edges
         if (this.x < this.size / 2 || this.x > width - this.size / 2) {
@@ -150,6 +154,10 @@ class Cube {
         
         pop();
     }
+
+    isAlive() {
+        return this.lifespan > 0;
+    }
 }
 
 class CubeManager {
@@ -159,22 +167,22 @@ class CubeManager {
     }
 
     addCube(x, y, size, color) {
-        this.cubes.push(new Cube(x, y, size, color, this.scrubber));
-    }
-
-    removeCube(index) {
-        if (index >= 0 && index < this.cubes.length) {
-            this.cubes.splice(index, 1);
+        if (this.cubes.length < 20) {
+            this.cubes.push(new Cube(x, y, size, color, this.scrubber));
         }
     }
 
     update(features) {
+        this.cubes = this.cubes.filter(cube => cube.isAlive());
+
         for (let cube of this.cubes) {
             // Update cube properties based on Meyda analyzer features
             cube.size = map(features.rms, 0, 0.1, 10, 100);
             cube.color = color(map(features.zcr, 0, 1, 0, 360), 100, 100);
             cube.update();
         }
+    this.cubes = this.cubes.filter(cube => cube.isAlive());
+
     }
 }
 
@@ -186,7 +194,22 @@ class PolarSpectrum {
         this.radius = radius;
         this.fft = new p5.FFT(0.8, fftSize);
         this.rotationAngle = 0;
-        this.skipFirstLastBins = 20; //number of bins to skip at the beginning and end of spectrum
+        this.skipFirstLastBins = 20; // number of bins to skip at the beginning and end of spectrum
+
+        // Initialize colorStyle as an object with properties
+        this.colorStyles = {
+            SPECTRUM: 'spectrum',
+            FOCUSED: 'focused'
+        };
+        this.colorStyle = this.colorStyles.SPECTRUM; // Set initial color style
+
+        this.cycleColorStyle = () => {
+            if (this.colorStyle === this.colorStyles.SPECTRUM) {
+                this.colorStyle = this.colorStyles.FOCUSED;
+            } else {
+                this.colorStyle = this.colorStyles.SPECTRUM;
+            }
+        };
     }
 
     update() {
@@ -210,14 +233,24 @@ class PolarSpectrum {
 
         for (let i = this.skipFirstLastBins; i < usableSpectrumLength - this.skipFirstLastBins; i += step) {
             let amplitude = spectrum[i];
-
             let angle = i * angleStep;
-            // map amplitude to a color
-            let c = map(amplitude, 0, 255, 250, 550);
-            c = c % 360;
-            let sat = 100;
-            let brt = 100;
-            let alpha = map(amplitude, 0, 255, 100, 255);
+
+            let c, sat, brt, alpha;
+            if (this.colorStyle === this.colorStyles.SPECTRUM) {
+                // Map amplitude to a color
+                c = map(amplitude, 0, 255, 250, 550);
+                c = c % 360;
+                sat = 100;
+                brt = 100;
+                alpha = map(amplitude, 0, 255, 100, 255);
+            } else if (this.colorStyle === this.colorStyles.FOCUSED) {
+                // Map amplitude to a color
+                c = map(amplitude, 0, 255, 250, 550);
+                c = c % 360;
+                sat = 0;
+                brt = 100;
+                alpha = map(amplitude, 0, 255, 100, 255);
+            }
 
             stroke(c, sat, brt, alpha);
             
