@@ -50,11 +50,12 @@ function setup() {
       "audioContext": getAudioContext(),
       "source": mySound,
       "bufferSize": 512,
-      "featureExtractors": ["rms", "zcr"],
+      "featureExtractors": ["rms", "zcr", "chroma"],
       "callback": (features) => {
         console.log(features);
         circleRadius = map(features.rms, 0, 0.1, 0, 200);
         cubeManager.update(features);
+        
       } 
     });
     analyzer.start();

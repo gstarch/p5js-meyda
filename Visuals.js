@@ -152,9 +152,11 @@ class Cube {
         // Draw lines to the scrubber
         pop();
         
-        stroke(0, 100, 100);
+        push()
+        stroke(this.color);
         line(this.x, this.y, this.scrubber.x, this.scrubber.y);
         line(this.x, this.y, this.scrubber.x, this.scrubber.y + this.scrubber.height);
+        pop();
     }
     
     isAlive() {
@@ -269,3 +271,5 @@ class PolarSpectrum {
         pop();
     }
 }
+
+
