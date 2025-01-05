@@ -178,7 +178,7 @@ class CubeManager {
         for (let cube of this.cubes) {
             // Update cube properties based on Meyda analyzer features
             cube.size = map(features.rms, 0, 0.1, 10, 100);
-            cube.color = color(map(features.zcr, 0, 1, 0, 360), 100, 100);
+            cube.color = color(map(features.zcr, 0, 100, 0, 360), 100, 100);
             cube.update();
         }
     this.cubes = this.cubes.filter(cube => cube.isAlive());
