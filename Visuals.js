@@ -120,9 +120,9 @@ class Cube {
         this.speedX = random(-2, 2);
         this.speedY = random(-2, 2);
         this.scrubber = scrubber;
-        this.lifespan = 6000;
+        this.lifespan = random(2000, 10000);
+        this.rotation = random(-0.01, 0.01);
     }
-
     update() {
         this.x += this.speedX;
         this.y += this.speedY;
@@ -138,23 +138,25 @@ class Cube {
             this.speedY *= -1;
         }
 
+        this.rotation += 0.01;
         this.draw();
     }
-
     draw() {
         push();
         rectMode(CENTER);
         fill(this.color);
-        rect(this.x, this.y, this.size, this.size);
-
-        // Draw lines to the scrubber
-        stroke(255);
-        line(this.x, this.y, this.scrubber.x, this.scrubber.y);
-        line(this.x, this.y, this.scrubber.x + this.scrubber.width, this.scrubber.y);
+        translate(this.x, this.y);
+        rotate(this.rotation);
+        rect(0, 0, this.size, this.size);
         
+        // Draw lines to the scrubber
         pop();
+        
+        stroke(0, 100, 100);
+        line(this.x, this.y, this.scrubber.x, this.scrubber.y);
+        line(this.x, this.y, this.scrubber.x, this.scrubber.y + this.scrubber.height);
     }
-
+    
     isAlive() {
         return this.lifespan > 0;
     }
