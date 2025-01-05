@@ -57,7 +57,7 @@ class WaveformVisual {
 }
 
 class Scrubber {
-    constructor(x = 0, y = 0, width = 2, height = 0, color = [0, 100, 100]) {
+    constructor(x = 0, y = 0, width = 2, height = 0, color = [0, 0, 100]) {
         this.x = x;
         this.y = y;
         this.width = width;
