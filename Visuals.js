@@ -247,9 +247,9 @@ class PolarSpectrum {
             let c, sat, brt, alpha;
             if (this.colorStyle === this.colorStyles.SPECTRUM) {
                 // Map amplitude to a color
-                c = map(amplitude, 0, 1, 250, 550);
+                c = map(amplitude, 0, 1, 200, 300);
                 c = c % 360;
-                sat = 100;
+                sat = 80;
                 brt = 100;
                 alpha = map(amplitude, 0, 1, 100, 200);
             } else if (this.colorStyle === this.colorStyles.FOCUSED) {
@@ -262,7 +262,7 @@ class PolarSpectrum {
 
             stroke(c, sat, brt, alpha);
             
-            let r = map(amplitude, 0, 1, 0, this.radius);
+            let r = map(amplitude, 0, 1, 100, this.radius);
             // polar to cartesian 
             let x = r * cos(angle);
             let y = r * sin(angle);
@@ -271,7 +271,6 @@ class PolarSpectrum {
             strokeWeight(10);
             line(0, 0, x, y);
         }
-
         pop();
     }
 }
@@ -302,7 +301,7 @@ class ChromaCircles {
         push();
         noStroke();
         for (let circle of this.circles) {
-            fill(220, circle.brightness, circle.brightness, 80);
+            fill(220, circle.brightness, circle.brightness, 100);
             ellipse(circle.x, circle.yPosition, circle.size, circle.size);
         }
         pop();
