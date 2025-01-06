@@ -85,26 +85,31 @@ class CircleVisual {
         this.radius = 0;
         this.minRadius = minRadius; 
         this.decayRate = decayRate; 
+        this.alpha = 100;
     }
 
-    update(radius) {
-        //when a beat is detected, update the radius
-        if (radius > this.radius) {
-            this.radius = radius;
-        } else {
-            // otherwise decay
-            this.radius *= this.decayRate;
-            // ensure the radius doesn't go below the minimum radius
-            if (this.radius < this.minRadius) {
-                this.radius = this.minRadius;
+    update(features) {
+        // Use RMS from features to update the radius
+        if (features && features.rms !== undefined) {
+            let newRadius = map(features.rms, 0, 0.1, this.minRadius, 200);
+            if (newRadius > this.radius) {
+                this.radius = newRadius;
+            } else {
+                // Decay the radius
+                this.radius *= this.decayRate;
+                if (this.radius < this.minRadius) {
+                    this.radius = this.minRadius;
+                }
             }
+            this.alpha = map(features.rms, 0, 0.2, 200, 0);
         }
         this.draw();
     }
 
     draw() {
         push();
-        fill(255);
+        fill(255, 0, 100, this.alpha);
+        stroke(0, 0, 100,);
         ellipse(this.x, this.y, this.radius, this.radius);
         pop();
     }

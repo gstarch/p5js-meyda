@@ -112,12 +112,11 @@ function draw() {
   
   // Get the amplitudeSpectrum from the analyzer and update the polar spectrum
   const features = analyzer.get(['amplitudeSpectrum', 'chroma', 'rms', 'zcr']);
-  circleRadius = map(features.rms, 0, 0.1, 0, 150);
   cubeManager.update(features);
   polarSpectrum.update(features.amplitudeSpectrum);
   chromaCircles.update(features.chroma);
   chromaCircles.draw();
-  circleVisual.update(circleRadius); 
+  circleVisual.update(features);
 
   drawFileName();
 }
