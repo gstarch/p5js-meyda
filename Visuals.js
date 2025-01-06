@@ -180,7 +180,7 @@ class CubeManager {
         this.cubes = this.cubes.filter(cube => cube.isAlive());
 
         for (let cube of this.cubes) {
-            // Update cube properties based on Meyda analyzer features
+            // update cube properties based on Meyda analyzer RMS and ZCR features
             cube.size = map(features.rms, 0, 0.1, 10, 100);
             cube.color = color(map(features.zcr, 0, 100, 0, 360), 100, 100);
             cube.update();
@@ -192,11 +192,10 @@ class CubeManager {
 
 
 class PolarSpectrum {
-    constructor(x, y, radius, fftSize = 128) {
+    constructor(x, y, radius) {
         this.x = x;
         this.y = y;
         this.radius = radius;
-        this.fft = new p5.FFT(0.8, fftSize);
         this.rotationAngle = 0;
         this.skipFirstLastBins = 20; // number of bins to skip at the beginning and end of spectrum
 
@@ -216,55 +215,55 @@ class PolarSpectrum {
         };
     }
 
-    update() {
-        let spectrum = this.fft.analyze();
+    update(amplitudeSpectrum) {
         this.rotationAngle += 0.01;
-        this.draw(spectrum);
+        this.draw(amplitudeSpectrum);
     }
 
-    draw(spectrum) {
+    draw(amplitudeSpectrum) {
+        if (!amplitudeSpectrum) return; // Ensure amplitudeSpectrum is available
+
         push();
         translate(this.x, this.y);
-        rotate(this.rotationAngle);
+        rotate(this.rotationAngle); //rotation makes the spectrum more dynamic and hide dull areas
         noFill();
         strokeWeight(4);
         
-        // use only a portion of the spectrum (highest frequencies don't occur that often)
-        let usableSpectrumLength = floor(spectrum.length * 0.8);
+        // Use only a portion of the spectrum (highest frequencies don't occur that often)
+        let usableSpectrumLength = floor(amplitudeSpectrum.length * 0.8);
         let angleStep = TWO_PI / (usableSpectrumLength - this.skipFirstLastBins * 2);
 
         let step = 1;
 
         for (let i = this.skipFirstLastBins; i < usableSpectrumLength - this.skipFirstLastBins; i += step) {
-            let amplitude = spectrum[i];
+            let amplitude = amplitudeSpectrum[i];
             let angle = i * angleStep;
 
             let c, sat, brt, alpha;
             if (this.colorStyle === this.colorStyles.SPECTRUM) {
                 // Map amplitude to a color
-                c = map(amplitude, 0, 255, 250, 550);
+                c = map(amplitude, 0, 1, 250, 550);
                 c = c % 360;
                 sat = 100;
                 brt = 100;
-                alpha = map(amplitude, 0, 255, 100, 255);
+                alpha = map(amplitude, 0, 1, 100, 200);
             } else if (this.colorStyle === this.colorStyles.FOCUSED) {
-                // Map amplitude to a color
-                c = map(amplitude, 0, 255, 250, 550);
-                c = c % 360;
+                // Map amplitude to alpha
+                c = 0;
                 sat = 0;
                 brt = 100;
-                alpha = map(amplitude, 0, 255, 100, 255);
+                alpha = map(amplitude, 0, 1, 100, 200);
             }
 
             stroke(c, sat, brt, alpha);
             
-            let r = map(amplitude, 0, 255, 0, this.radius);
-
+            let r = map(amplitude, 0, 1, 0, this.radius);
             // polar to cartesian 
             let x = r * cos(angle);
             let y = r * sin(angle);
 
             // line from the center to the edge
+            strokeWeight(10);
             line(0, 0, x, y);
         }
 

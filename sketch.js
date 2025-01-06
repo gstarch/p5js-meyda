@@ -16,7 +16,7 @@ let chromaCircles;
 function setup() {
   colorMode(HSB, 360, 100, 100, 255);
   
-  backgroundColor = color(Constants.backgroundColor[0], Constants.backgroundColor[1], Constants.backgroundColor[2]);
+  backgroundColor = color(Constants.backgroundColor[0], Constants.backgroundColor[1], Constants.backgroundColor[2], 100);
 
   soundFormats('wav', 'mp3');
   mySound = loadSound('../sounds/Kalte Ohren (Remix).mp3', () => {
@@ -39,7 +39,7 @@ function setup() {
   circleVisual = new CircleVisual(width / 2, height / 2, 10, 0.96);
 
   // Initialize PolarSpectrum
-  polarSpectrum = new PolarSpectrum(width / 2, height / 2, 300);
+  polarSpectrum = new PolarSpectrum(width / 2, height / 2, 200);
 
   // Initialize scrubber
   scrubber = new Scrubber(20, 300 + 255 * 0.7, 2, 30);
@@ -50,13 +50,10 @@ function setup() {
     analyzer = Meyda.createMeydaAnalyzer({
       "audioContext": getAudioContext(),
       "source": mySound,
-      "bufferSize": 512,
-      "featureExtractors": ["rms", "zcr", "chroma"],
+      "bufferSize": 256,
+      "featureExtractors": ["rms", "zcr", "chroma", "amplitudeSpectrum"],
       "callback": (features) => {
         console.log(features);
-        circleRadius = map(features.rms, 0, 0.1, 0, 200);
-        cubeManager.update(features);
-        
       } 
     });
     analyzer.start();
@@ -107,13 +104,21 @@ function setup() {
 }
 
 function draw() {
-  background(backgroundColor);
+  // Use a semi-transparent background to create a fading effect
+  background(backgroundColor); // Adjust the alpha value for more or less fading
+
   controls.update();
-  circleVisual.update(circleRadius); //TODO: move to Meyda callback
   waveformVisual.update(scrubber);
-  polarSpectrum.update();
-  chromaCircles.update(analyzer.get('chroma'));
+  
+  // Get the amplitudeSpectrum from the analyzer and update the polar spectrum
+  const features = analyzer.get(['amplitudeSpectrum', 'chroma', 'rms', 'zcr']);
+  circleRadius = map(features.rms, 0, 0.1, 0, 150);
+  cubeManager.update(features);
+  polarSpectrum.update(features.amplitudeSpectrum);
+  chromaCircles.update(features.chroma);
   chromaCircles.draw();
+  circleVisual.update(circleRadius); 
+
   drawFileName();
 }
 
